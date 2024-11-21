@@ -52,13 +52,6 @@ function isSubstring(string, subString) {
   return false;
 }
 
-function getBombMSG() {
-  const bombWarning = "\n You Stepped on Mine 💣!!! ";
-  const attemptInfo = " Remaining Attempts : " + attemptsRemaining;
-
-  return bombWarning + attemptInfo;
-}
-
 function movingInstruction(params) {
   const up = "Move ⬆️ : W ";
   const down = " Down ⬇️ : S ";
@@ -74,18 +67,15 @@ function createBox() {
 
   for (let row = 0; row < boxRXC; row++) {
     box += "\n" + startingSpaces();
+
     for (let column = 0; column < boxRXC; column++) {
       boxIndex++;
-      if (boxIndex !== currentPosition) {
-        box += "⬜";
-      }
-      if (boxIndex === currentPosition) {
-        box += "🟩";
-      }
+      box = box + (boxIndex === currentPosition ? "🟩" : "⬜");
+
       if (!isSubstring(path, currentPosition)) {
         currentPosition = 49;
         attemptsRemaining--;
-        console.log(getBombMSG());
+        console.log("\n You Stepped on Mine 💣!!! ");
         continue;
       }
     }
@@ -109,23 +99,25 @@ function gameInfo() {
 
 function getWarningMSG() {
   const warning = "\n Incorrect Instruction !!! ";
-  
+
   return warning;
 }
 
 function controller(userInput) {
-  if (userInput === 'w' || userInput === 'W') {
+  const instruction = userInput.toLowerCase();
+
+  if (instruction === 'w') {
     return currentPosition > boxRXC ? currentPosition - boxRXC : currentPosition;
   }
-  if (userInput === 's' || userInput === 'S') {
+  if (instruction === 's') {
     const down = currentPosition < (boxRXC * boxRXC) - 6;
     return down ? currentPosition + boxRXC : currentPosition;
   }
-  if (userInput === 'a' || userInput === 'A') {
+  if (instruction === 'a') {
     const left = currentPosition % boxRXC === 1;
     return left ? currentPosition : currentPosition - 1;
   }
-  if (userInput === 'd' || userInput === 'D') {
+  if (instruction === 'd') {
     const right = currentPosition % boxRXC === 0;
     return right ? currentPosition : currentPosition + 1;
   }
@@ -136,8 +128,9 @@ function controller(userInput) {
   return currentPosition;
 }
 
-function header(params) {
-  let boxHead = "┏";    
+function header() {
+  let boxHead = "┏";
+
   for (let index = 0; index < BOX_SIZE; index++) {
     boxHead = boxHead + "━";
   }
@@ -166,9 +159,9 @@ function startingSpaces() {
 }
 
 function createHeading() {
-  
+
   const headingTop = startingSpaces() + header();
-  const heading = "\n" + startingSpaces() + "┃" +"      💣 MINE FIELD 💣        " + "┃\n";
+  const heading = "\n" + startingSpaces() + "┃" + "      💣 MINE FIELD 💣        " + "┃\n";
   const headingBottom = startingSpaces() + footer();
 
   return headingTop + heading + headingBottom;
@@ -183,6 +176,7 @@ function startMinefield(path, name) {
 
   createBox(path);
   console.log(movingInstruction());
+  console.log("\n Remaining Attempts : " + attemptsRemaining);
 
   if (currentPosition === exit) {
     return "\n 🎉🎉 Congratulations 🤩 !! " + name + " you Won 🎉🎉\n";
