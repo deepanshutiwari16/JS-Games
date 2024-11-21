@@ -24,9 +24,9 @@ function generatePath() {
   return safePath4;
 }
 
-function isCharacterMatched(string, subString, index) {
-  for (let subStrIndex = 0; subStrIndex < subString.length; subStrIndex++) {
-    if (string[index + subStrIndex] !== subString[subStrIndex]) {
+function matchAtPosition(string, subString, stringIndex) {
+  for (let substrIndex = 0; substrIndex < subString.length; substrIndex++) {
+    if (string[stringIndex + substrIndex] !== subString[substrIndex]) {
       return false;
     }
   }
@@ -35,12 +35,14 @@ function isCharacterMatched(string, subString, index) {
 }
 
 function isSubstring(string, subString) {
-  if (subString.length === 0) {
+  subString += "";
+
+  if (subString === '') {
     return false;
   }
 
-  for (let index = 0; index < string.length; index++) {
-    if (isCharacterMatched(string, subString, index)) {
+  for (let index = 0; index <= string.length - subString.length; index++) {
+    if (matchAtPosition(string, subString, index)) {
       return true;
     }
   }
@@ -64,7 +66,7 @@ function movingInstruction(params) {
   return "\n" + up + down + left + right;
 }
 
-function createBox() {
+function createBox(path) {
   let boxIndex = 0;
   let box = "";
 
@@ -158,4 +160,6 @@ console.log(gameInfo());
 prompt("\n please enter to continue :");
 
 const path = generatePath();
+console.log(path);
+prompt("\n please enter to continue :");
 console.log(startMinefield(path));
