@@ -2,6 +2,8 @@ const boxRXC = 7;
 let attemptsRemaining = 10;
 let currentPosition = 49;
 const exit = 1;
+const BOX_SIZE = 30;
+const SPACE = " ";
 
 const safePath1 = "49 48 41 34 27 20 19 18 25 32 31 30 23 16 15 8 1";
 const safePath2 = "49 48 47 40 33 26 25 24 31 38 37 36 29 22 15 16 17 10 3 2 1";
@@ -63,15 +65,15 @@ function movingInstruction(params) {
   const left = " Left ⬅️ : A ";
   const right = " Rigth ➡️ : D ";
 
-  return "\n" + up + down + left + right;
+  return "\n " + up + down + left + right;
 }
 
-function createBox(path) {
+function createBox() {
   let boxIndex = 0;
   let box = "";
 
   for (let row = 0; row < boxRXC; row++) {
-    box += "\n";
+    box += "\n" + startingSpaces();
     for (let column = 0; column < boxRXC; column++) {
       boxIndex++;
       if (boxIndex !== currentPosition) {
@@ -106,10 +108,9 @@ function gameInfo() {
 }
 
 function getWarningMSG() {
-  const warning = "\n Incorrect Direction !!! ";
-  const attemptInfo = " Remaining Attempts : " + attemptsRemaining;
-
-  return warning + attemptInfo;
+  const warning = "\n Incorrect Instruction !!! ";
+  
+  return warning;
 }
 
 function controller(userInput) {
@@ -129,37 +130,74 @@ function controller(userInput) {
     return right ? currentPosition : currentPosition + 1;
   }
 
-  attemptsRemaining--;
   console.log(getWarningMSG());
   prompt("\n please enter a valid instruction...");
 
   return currentPosition;
 }
 
-function startMinefield(path) {
+function header(params) {
+  let boxHead = "┏";    
+  for (let index = 0; index < BOX_SIZE; index++) {
+    boxHead = boxHead + "━";
+  }
+
+  return boxHead + "┓";
+}
+
+function footer() {
+  let boxFoot = "┗";
+
+  for (let index = 0; index < BOX_SIZE; index++) {
+    boxFoot = boxFoot + "━";
+  }
+
+  return boxFoot + "┛";
+}
+
+function startingSpaces() {
+  let spaceFromStart = SPACE;
+
+  for (let index = 0; index < 20; index++) {
+    spaceFromStart += SPACE;
+  }
+
+  return spaceFromStart;
+}
+
+function createHeading() {
+  
+  const headingTop = startingSpaces() + header();
+  const heading = "\n" + startingSpaces() + "┃" +"      💣 MINE FIELD 💣        " + "┃\n";
+  const headingBottom = startingSpaces() + footer();
+
+  return headingTop + heading + headingBottom;
+}
+
+function startMinefield(path, name) {
   console.clear();
 
   if (attemptsRemaining < 1) {
-    return "\n 💀 You Are Dead ⚰️!! Better Luck In Next Life! ☮️\n";
+    return "\n" + name + " you 💀 are Dead ⚰️ !! Better Luck In Next Life! ☮️\n";
   }
 
   createBox(path);
   console.log(movingInstruction());
 
   if (currentPosition === exit) {
-    return "\n 🎉🎉 Congratulations 🤩!! You Won 🎉🎉\n";
+    return "\n 🎉🎉 Congratulations 🤩 !! " + name + " you Won 🎉🎉\n";
   }
 
   const userInput = getUserInput();
   currentPosition = controller(userInput);
 
-  return startMinefield(path);
+  return startMinefield(path, name);
 }
 
-console.log(gameInfo());
-prompt("\n please enter to continue :");
+console.log(createHeading());
+prompt("\n press enter to continue");
 
+console.log(gameInfo());
+const playerName = prompt("\n please enter your name :");
 const path = generatePath();
-console.log(path);
-prompt("\n please enter to continue :");
-console.log(startMinefield(path));
+console.log(startMinefield(path, playerName));
