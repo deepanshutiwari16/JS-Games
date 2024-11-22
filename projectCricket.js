@@ -6,23 +6,23 @@ function toss() {
   const TAIL = 2;
   let didYouWin = 0;
 
-  confirm("Are you excited for the TOSS");
+  confirm("\n Are you excited for the TOSS");
 
-  if (confirm("Do you want head")) {
+  if (confirm("\n Do you want head")) {
     didYouWin = Math.ceil(Math.random() * 2) === HEAD;
   } else {
     didYouWin = Math.ceil(Math.random() * 2) === TAIL;
   }
 
   if (didYouWin) {
-    console.log("Oh! You won the toss");
+    console.log("\n Oh! You won the toss");
 
-    if (confirm("Do You Want Batting?")) {
-      console.log("You will bat first");
+    if (confirm("\n Do You Want Batting?")) {
+      console.log("\n You will bat first");
 
       return "youBat";
     } else {
-      console.log("You will bowl first");
+      console.log(" You will bowl first");
 
       return "youBowl";
     }
@@ -31,11 +31,11 @@ function toss() {
   const aiDecision = Math.ceil(Math.random() * 2);
 
   if (aiDecision === 1) {
-    console.log("Bot won the toss, will bat first");
+    console.log("\n Bot won the toss, will bat first");
     return "botBat";
   }
 
-  console.log("BOT won the toss, will bowl first");
+  console.log("\n BOT won the toss, will bowl first");
   return "botBowl";
 
 }
@@ -69,6 +69,7 @@ function ballResult(bowltype, shotType) {
       return shotType === 1 ? 2 : 0;
   }  
 
+  return 1;
 }
 
 function getWicket(bowlType, shotType) {
@@ -84,20 +85,20 @@ function getWicket(bowlType, shotType) {
 
 function isLBW(shotType, bowlType) {
   if (shotType === 3 && bowlType === 4) {
-    console.log("howzzthat????");
+    console.log("\n howzzthat????");
     wait(9);
 
     const umpireDecision = Math.ceil(Math.random() * 2);
 
     if (umpireDecision === 2) {
-      console.log("umpire signals OUT!!!!");
+      console.log("\n umpire signals OUT!!!!");
       return true;
     }
 
     if (umpireDecision === 1) {
-      console.log("umpire gives not out!!!");
-      if (confirm("Do you want review?..")) {
-        console.log("decision pending....");
+      console.log("\n umpire gives not out!!!");
+      if (confirm("\n Do you want review?..")) {
+        console.log("\n decision pending....");
         wait(6);
         return false;
       }
@@ -107,15 +108,17 @@ function isLBW(shotType, bowlType) {
 }
 
 function getTheBowlType(bowlType) {
+  let msg = "\n you are going to bowl a ";
+
   switch (bowlType) {
     case 1:
-      return "YORKER";
+      return msg + "YORKER";
     case 2:
-      return "BOUNCER";
+      return msg + "BOUNCER";
     case 3:
-      return "OUTSWING";
+      return msg + "OUTSWING";
     case 4:
-      return "INSWING";
+      return msg + "INSWING";
   }
 }
 
@@ -156,14 +159,14 @@ function doBowlingFirst() {
 
       const bowlType = askBowlType();
 
-      console.log("you are going to bowl a " + getTheBowlType(bowlType));
-      console.log("Batsman is ready to hit....");
+      console.log(getTheBowlType(bowlType));
+      console.log("\n Batsman is ready to hit....");
 
       wait(6);
 
       const shotType = Math.ceil(Math.random() * 4);
 
-      console.log("BOT plays a " + getShotType(shotType));
+      console.log(" Batsman plays a " + getShotType(shotType));
 
       teamBotScore += ballResult(bowlType, shotType);
       wicket += getWicket(bowlType, shotType);
@@ -172,7 +175,9 @@ function doBowlingFirst() {
         wicket += 1;
       }
 
-      console.log("BOT ", teamBotScore, "-", wicket, "(over " + over + "." + ball + ")");
+      prompt("\n press enter to continue");
+      console.clear();
+      console.log("\n BOT ", teamBotScore, "-", wicket, "(over " + over + "." + ball + ")");
     }
 
     over++;
