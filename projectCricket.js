@@ -60,8 +60,15 @@ function ballResult(bowltype, shotType) {
       case 4:
         return 4;
     }
-  }
-  return 0;
+  } 
+
+  switch (bowltype) {
+    case 1:
+      return shotType === 4 ? 4 : 0;
+    case 4:
+      return shotType === 1 ? 2 : 0;
+  }  
+
 }
 
 function getWicket(bowlType, shotType) {
@@ -125,16 +132,29 @@ function getShotType(shotType) {
   }
 }
 
+function bowlingInstruction() {
+  const bowlingOptions = "\n THE BOWLING OPTIONS ARE FOLLOWING ⤵️ \n";
+  const forYorker = " 🎾 1 for YORKER \n";
+  const forBouncer = " 🎾 2 for BOUNCER \n";
+  const forOutSwing = " 🎾 3 for OUTSWING \n";
+  const forInSwing = " 🎾 4 for INSWING";
+
+  return bowlingOptions + forYorker + forBouncer + forOutSwing + forInSwing;
+}
+
+function askBowlType() {
+  return +prompt("\n Choose one of them to attack the Batsman");
+}
+
 function doBowlingFirst() {
   let wicket = 0;
   let over = 0;
 
   while (over < 1 && wicket !== 5) {
     for (let ball = 1; ball <= 6; ball++) {
-      console.log("THE BOWLING OPTIONS ARE FOLLOWING ⤵️");
-      console.log(" 🎾 1 for YORKER \n 🎾 2 for BOUNCER \n 🎾 3 for OUTSWING \n 🎾 4 for INSWING");
+      console.log(bowlingInstruction());
 
-      const bowlType = +prompt("Choose one of them to attack the Batsman");
+      const bowlType = askBowlType();
 
       console.log("you are going to bowl a " + getTheBowlType(bowlType));
       console.log("Batsman is ready to hit....");
@@ -150,18 +170,13 @@ function doBowlingFirst() {
 
       if (isLBW(shotType, bowlType)) {
         wicket += 1;
-        break;
       }
 
       console.log("BOT ", teamBotScore, "-", wicket, "(over " + over + "." + ball + ")");
-
     }
 
     over++;
   }
-  //const result = doChasing(teamBotScore);
-
-  //return result;
 }
 
 function startGame() {
