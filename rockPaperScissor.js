@@ -27,22 +27,13 @@ function createHeading() {
   return headingTop + heading + headingBottom;
 }
 
-function introMessage() {
-  const welcome = "\n Welcome to ROCK🪨 PAPER📃 SCISSOR✂️  Game";
-  const rule = "\n\n Rules are same as real ROCK Paper Scissor game";
-  const rockRepresentation = "\n 1 will represent ROCK 🪨";
-  const paperRepresentation = "\n 2 will represent Paper 📃";
-  const scissorRepresentation = "\n 1 will represent Scissor ✂️";
-
-  return welcome + rule + rockRepresentation + paperRepresentation + scissorRepresentation;
-}
-
-function instruction() {
-  const forROCK = "\n INSTRUCTION \n Press 1 for ROCK 🪨";
+function instruction(player) {
+  const welcome = "\n\n " + player + " Welcome to ROCK🪨 PAPER📃 SCISSOR✂️";
+  const forROCK = "\n\n Press 1 for ROCK 🪨";
   const forPaper = "\n Press 2 for PAPER 📃";
   const forScissor = "\n Press 3 for SCISSOR ✂️";
 
-  return forROCK + forPaper + forScissor;
+  return createHeading() + welcome + forROCK + forPaper + forScissor;
 }
 
 function computerChoice() {
@@ -93,31 +84,23 @@ function giveResult(playerInput, computerInput, player) {
   return ("\n Enter a valid input. READ INSTRUCTIONS....");
 }
 
-function game(player) {
-  console.log(instruction());
+function game() {
+  console.clear();
+  let wantToPlay = confirm("\n Do you want to play rock paper scissor");
 
-  const playerInput = +(prompt("\n " + player + " 🧔 Enter your choice : "));
-  const computerInput = computerChoice();
-  const result = giveResult(playerInput, computerInput, player);
-
-  return result;
-}
-
-console.log(createHeading());
-console.log(introMessage());
-
-const player = prompt("\n Enter player 🧔 name : ");
-let wantToPlay = confirm("\n Do you want to continue");
-
-function gameStart() {
   while (wantToPlay) {
-    console.clear();
+    const player = prompt("\n Enter player 🧔 name : ");
+    console.log(instruction(player));
 
-    console.log(game(player));
-    wantToPlay = confirm("\n Do you want to play");
+    const playerInput = +(prompt("\n " + player + " 🧔 Enter your choice : "));
+    const computerInput = computerChoice();
+    const result = giveResult(playerInput, computerInput, player);
+    console.log(result);
+    prompt("\n press enter");
+    return game();
   }
 }
 
-gameStart();
-console.clear();
+game();
+
 console.log("\n Come Back To Play \n");
