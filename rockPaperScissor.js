@@ -11,47 +11,39 @@ function repeat(string, times) {
   return string;
 }
 
-function topOfHeading() {
+function header() {
   return "┏" + repeat('', headingSize) + "┓";
 }
 
-function bottomOfHeading() {
+function footer() {
   return "┗" + repeat('', headingSize) + "┛";
 }
 
 function createHeading() {
-  const headingTop = topOfHeading();
   const heading = "\n┃" + "        Rock🪨 Paper📃 Scissor✂️  game      " + "┃\n";
-  const headingBottom = bottomOfHeading();
 
-  return headingTop + heading + headingBottom;
+  return header() + heading + footer();
 }
 
-function instruction(player) {
-  const welcome = "\n\n " + player + " Welcome to ROCK🪨 PAPER📃 SCISSOR✂️";
+function userWantsToPlayGame() {
+  return confirm("\n Do you want to play rock paper scissor");
+}
+
+function showInstructions() {
+  const welcome = "\n\n Welcome to ROCK🪨 PAPER📃 SCISSOR✂️";
   const forROCK = "\n\n Press 1 for ROCK 🪨";
   const forPaper = "\n Press 2 for PAPER 📃";
   const forScissor = "\n Press 3 for SCISSOR ✂️";
 
-  return createHeading() + welcome + forROCK + forPaper + forScissor;
+  console.log(createHeading() + welcome + forROCK + forPaper + forScissor);
 }
 
-function computerChoice() {
+function getPlayerChoice() {
+  return +(prompt("\n 🧔 Enter your choice : "));
+}
+
+function getComputerChoice() {
   return Math.ceil(Math.random() * 3);
-}
-
-function compareChoices(playerInput, computerInput, player) {
-  const playerWin = "\n Hurray 🎉🎉🎉 " + player + " You won the match.🎉🎉\n";
-  const computerWin = "\n OOPS😭😭😭 " + player + " You lost the match.🎉🎉\n";
-
-  switch (playerInput) {
-    case ROCK:
-      return computerInput === PAPER ? computerWin : playerWin;
-    case PAPER:
-      return computerInput === SCISSOR ? computerWin : playerWin;
-    default:
-      return computerInput === ROCK ? computerWin : playerWin;
-  }
 }
 
 function getSymbol(choice) {
@@ -64,43 +56,67 @@ function getSymbol(choice) {
   return "✂️";
 }
 
-function printChoices(playerInput, computerInput) {
-  const playerChoice = getSymbol(playerInput);
-  const botChoice = getSymbol(computerInput);
+function displayCoices(playerInput, computerInput) {
+  const playerChoiceSymbol = getSymbol(playerInput);
+  const computerChoiceSymbol = getSymbol(computerInput);
 
-  return "\n your choice is " + playerChoice + "\n computer choice is " + botChoice;
+  console.log("\n your choice is " + playerChoiceSymbol + "\n computer choice is " + computerChoiceSymbol);
 }
 
-function giveResult(playerInput, computerInput, player) {
-  if (playerInput === computerInput) {
-    console.log(printChoices(playerInput, computerInput));
-    return "\n Match Tied";
-  }
-  if (playerInput === 1 || playerInput === 2 || playerInput === 3) {
-    console.log(printChoices(playerInput, computerInput));
-    return compareChoices(playerInput, computerInput, player);
-  }
+function isDraw(playerInput, computerInput) {
+  return playerInput === computerInput;
+}
 
-  return ("\n Enter a valid input. READ INSTRUCTIONS....");
+function drawMsg() {
+  console.log("\n Match tied");
+}
+
+function isPlayerWon(playerInput, computerInput) {
+  return playerInput === ROCK && computerInput === SCISSOR || playerInput === PAPER && computerInput === ROCK || playerInput === SCISSOR && computerInput === PAPER;
+}
+
+function playerWinMsg() {
+  console.log("\n Hurray 🎉🎉🎉 You won the match.🎉🎉\n");
+}
+
+function computerWinMsg() {
+  console.log("\n OOPS😭😭😭 You lost the match.🎉🎉\n");
+}
+
+function inputNotValidMsg() {
+  console.log("\n Input is not valid. read Instruction");
 }
 
 function game() {
-  console.clear();
-  let wantToPlay = confirm("\n Do you want to play rock paper scissor");
+  const playerInput = getPlayerChoice();
+  const computerInput = getComputerChoice();
 
-  while (wantToPlay) {
-    const player = prompt("\n Enter player 🧔 name : ");
-    console.log(instruction(player));
-
-    const playerInput = +(prompt("\n " + player + " 🧔 Enter your choice : "));
-    const computerInput = computerChoice();
-    const result = giveResult(playerInput, computerInput, player);
-    console.log(result);
-    prompt("\n press enter");
-    return game();
+  if (isNaN(playerInput)) {
+    return inputNotValidMsg();
   }
+
+  displayCoices(playerInput, computerInput);
+
+  if (isDraw(playerInput, computerInput)) {
+    return drawMsg();
+  }
+
+  if (isPlayerWon(playerInput, computerInput)) {
+    return playerWinMsg();
+  }
+
+  return computerWinMsg();
 }
 
-game();
+function startGame() {
+  while (userWantsToPlayGame()) {
+    console.clear();
+    showInstructions();
 
-console.log("\n Come Back To Play \n");
+    game();
+  }
+
+  console.log("\n Come Back To Play \n");
+}
+
+startGame();
